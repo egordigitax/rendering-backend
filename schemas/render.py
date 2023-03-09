@@ -2,15 +2,18 @@ from pydantic import BaseModel, Field
 from bson import ObjectId
 from utils.py_object_id import PyObjectId
 
+
 class FilesSchema(BaseModel):
   close: str
   mid: str
   range: str
   model: str
 
+
 class ErrorSchema(BaseModel):
   type: str
   stack_trace: str
+
 
 class RenderSchema(BaseModel):
   id: PyObjectId = Field(default_factory=PyObjectId, alias='_id')
@@ -55,6 +58,7 @@ class RenderSchema(BaseModel):
 
     filtered = {k: v for k, v in traits.items() if v is not None}
     return filtered
+
 
   class Config:
     json_encoders = { ObjectId: str }

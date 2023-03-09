@@ -8,6 +8,7 @@ from enum import Enum
 
 router = APIRouter(prefix='/render', tags=['Render'])
 
+
 @router.post('/', response_description='Request for render new model', response_model=RenderSchema, status_code=status.HTTP_201_CREATED)
 async def create(render_request: RenderSchema = Body(example={
   'token_id': '1',
@@ -33,11 +34,13 @@ async def create(render_request: RenderSchema = Body(example={
   render = await db.renders.find_one({'_id': PyObjectId(new_render.inserted_id)})
   return RenderSchema(**render)
 
+
 class Derivative(str, Enum):
   close = 'close'
   mid = 'mid'
   range = 'range'
   model = 'model'
+
 
 @router.get('/{id}', response_model=RenderSchema)
 async def show(id: str):
@@ -45,12 +48,15 @@ async def show(id: str):
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Render {id} not found")
   return RenderSchema(**render)
 
+
 @router.get('/{id}/{derivative}', response_description='Show specific render')
 async def derivative(id: str, derivative: Derivative):
   if (render := await db.renders.find_one({'_id': PyObjectId(id)})) is None:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Render {id} not found")
 
+
   render = RenderSchema(**render)
+
 
   if render.files is not None:
     if derivative is Derivative.model:

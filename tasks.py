@@ -7,7 +7,9 @@ from utils.py_object_id import PyObjectId
 from utils.blender_api import Api, ModelSetup
 import traceback
 
+
 worker = Celery(__name__, broker=settings.broker_url, backend=settings.result_backend)
+
 
 async def render_proccess(render_id: str):
   render = await db.renders.find_one({'_id': PyObjectId(render_id)})
